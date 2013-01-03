@@ -6,6 +6,7 @@
 
 import tornado.ioloop
 import tornado.web
+
 from rdlm.options import Options 
 from rdlm.hello_handler import HelloHandler
 from rdlm.active_locks_handler import ActiveLocksHandler
@@ -51,3 +52,6 @@ def main():
     application.listen(Options().port)
     iol = get_ioloop()
     iol.start()
+
+if __name__ == '__main__':
+    main()

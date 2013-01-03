@@ -1,0 +1,7 @@
+include .gitignore
+include LICENSE
+include README.md
+include Makefile
+include rdlm.py
+recursive-include tests *
+recursive-include rdlm *

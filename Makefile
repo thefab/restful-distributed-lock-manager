@@ -1,3 +1,11 @@
+default: all
+
+all:
+	python setup.py build
+
+install: all
+	python setup.py install
+
 clean:
 	rm -f *.pyc
 	cd tests && rm -f *.pyc
@@ -5,6 +13,13 @@ clean:
 	cd tests && rm -Rf htmlcov 
 	rm -f .coverage tests/.coverage
 	rm -f tests/rdlm
+	rm -f rdlm/rdlm
+	rm -f MANIFEST
+	rm -Rf build
+	rm -Rf dist
+
+sdist: clean
+	python setup.py sdist --no-defaults
 
 link: 
 	if ! test -L tests/rdlm; then ln -s ../rdlm tests/rdlm; fi
