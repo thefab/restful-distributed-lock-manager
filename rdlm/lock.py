@@ -158,6 +158,7 @@ class Resource(object):
                         continue
                     lock.set_active()
                     self.active_lock = lock
+                    break
                 except IndexError:
                     break
 
