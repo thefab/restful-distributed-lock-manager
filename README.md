@@ -53,9 +53,9 @@ The API is described here with [the python/request library][REQUESTS] but it's a
     201
     => SUCCESS / CREATED
 
-    >>> lock_url = r.header('Location')
+    >>> lock_url = r.headers['Location']
     >>> lock_url
-    http://localhost:8888/locks/popo/ff14608f6ab342f0bb2a86d551d42a8c
+    http://localhost:8888/locks/resource1/ff14608f6ab342f0bb2a86d551d42a8c
     => the lock_url is the unique identifier for this successful lock
 
 ### Acquire a lock on the resource "resource1" (and don't get it, timeout after 20 ("wait") seconds)
