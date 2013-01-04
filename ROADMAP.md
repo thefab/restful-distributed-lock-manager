@@ -1,6 +1,6 @@
 # ROADMAP
 
-## 0.1 Milestone
+## 0.1 Milestone (we are almost there)
 
 - Basic set of features (acquiring/releasing an exclusive lock) but well tested
 
