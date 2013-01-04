@@ -26,11 +26,11 @@ If the lock is acquired, the system gives to the lock a **unique** URL to the cl
 
 ## Warning
 
-The development is at an early stage (see ROADMAP.md document).
+The development is at an early stage (see `ROADMAP.md` document).
 
 ## API
 
-The API is described here with [the python/request library][REQUESTS] but it's a HTTP/RESTful API, so it's not linked with a specific language or tool.
+The API is described in this document with [the python/request library][REQUESTS] but it's a HTTP/RESTful API, so it's not linked with a specific language or tool. If you prefer a more classic HTTP/API file, please look at `API.md` file.
 
 ### Imports and constants
 
