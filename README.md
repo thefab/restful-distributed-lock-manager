@@ -2,7 +2,7 @@
 
 ## What is it ?
 
-`RDLM` (Restful Distributed Lock Manager) is a lock manager over HTTP build on [Tornado][TORNADO].
+`RDLM` (Restful Distributed Lock Manager) is a lock manager over HTTP built on [Tornado][TORNADO].
 
 ## Concepts
 
