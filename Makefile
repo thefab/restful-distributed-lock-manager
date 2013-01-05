@@ -31,5 +31,10 @@ test: link
 rst:
 	cat README.md |pandoc --from=markdown --to=rst >README.rst
 
+upload: rst
+	python setup.py sdist register upload
+
 coverage: link
 	cd tests && coverage run `which nosetests` && coverage html --include='*/restful-distributed-lock-manager/*' --omit='test_*'
+
+release: test coverage clean pload clean 
