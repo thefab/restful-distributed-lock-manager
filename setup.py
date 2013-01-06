@@ -6,24 +6,25 @@
 
 from distutils.core import setup
 
-description = "RDLM (Restful Distributed Lock Manager) is a lock manager over HTTP build on Tornado"
+VERSION="0.1a1"
+DESCRIPTION = "RDLM (Restful Distributed Lock Manager) is a lock manager over HTTP build on Tornado"
 try:
     with open('README.rst') as f:
-        long_description = f.read()
+        LONG_DESCRIPTION = f.read()
 except IOError:
-    long_description = description
+    LONG_DESCRIPTION = DESCRIPTION
 
 setup(
     name='rdlm',
-    version='0.1a1',
+    version=VERSION,
     author="Fabien MARTY",
     author_email="fabien.marty@gmail.com",
     url="https://github.com/thefab/restful-distributed-lock-manager",
     packages=['rdlm',],
     license='MIT',
     download_url='https://github.com/thefab/restful-distributed-lock-manager',
-    description=description,
-    long_description=long_description,
+    description=DESCRIPTION,
+    long_description=LONG_DESCRIPTION,
     scripts=["rdlm-daemon.py"],
     classifiers=[
         'Development Status :: 3 - Alpha',
