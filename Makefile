@@ -37,4 +37,4 @@ upload: rst
 coverage: link
 	cd tests && coverage run `which nosetests` && coverage html --include='*/restful-distributed-lock-manager/*' --omit='test_*'
 
-release: test coverage clean pload clean 
+release: test coverage clean upload clean 
