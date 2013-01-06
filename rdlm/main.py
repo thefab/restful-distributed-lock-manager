@@ -9,8 +9,8 @@ import tornado.web
 
 from rdlm.options import Options 
 from rdlm.hello_handler import HelloHandler
-from rdlm.active_locks_handler import ActiveLocksHandler
 from rdlm.locks_handler import LocksHandler
+from rdlm.lock_handler import LockHandler
 from rdlm.unit_testing import UnitTestingHandler
 from rdlm.lock import LOCK_MANAGER_INSTANCE
 
@@ -30,8 +30,8 @@ def get_app(unit_testing = False):
     '''
     url_list = [
         tornado.web.URLSpec(r"/", HelloHandler, name="hello"),
-        tornado.web.URLSpec(r"/active_locks/([a-zA-Z0-9]+)", ActiveLocksHandler, name="active_locks"),
-        tornado.web.URLSpec(r"/locks/([a-zA-Z0-9]+)/([a-zA-Z0-9]+)", LocksHandler, name="lock")
+        tornado.web.URLSpec(r"/locks/([a-zA-Z0-9]+)", LocksHandler, name="locks"),
+        tornado.web.URLSpec(r"/locks/([a-zA-Z0-9]+)/([a-zA-Z0-9]+)", LockHandler, name="lock")
     ]
     if unit_testing:
         url_list.append(tornado.web.URLSpec(r"/reset", UnitTestingHandler, name="unit_testing"))

@@ -46,8 +46,8 @@ The API is described in this document with [the python/request library][REQUESTS
     >>> raw_body = json.dumps(lock_dict)
     => you have to do an HTTP/POST with a non encoded body (raw) which is a JSON string with these 3 keys
 
-    >>> r = requests.post("%s/active_locks/%s" % (BASE_URL, RESOURCE_NAME1), data=raw_body)
-    => we post it to /active_locks/resource1
+    >>> r = requests.post("%s/locks/%s" % (BASE_URL, RESOURCE_NAME1), data=raw_body)
+    => we post it to /locks/resource1
 
     >>> r.status_code
     201
@@ -62,7 +62,7 @@ The API is described in this document with [the python/request library][REQUESTS
 
     >>> lock_dict = {"title": "just an indicative client title", "lifetime": 300, "wait": 20}
     >>> raw_body = json.dumps(lock_dict)
-    >>> r = requests.post("%s/active_locks/%s" % (BASE_URL, RESOURCE_NAME1), data=raw_body)
+    >>> r = requests.post("%s/locks/%s" % (BASE_URL, RESOURCE_NAME1), data=raw_body)
     >>> [...] blocking during 20 ("wait") seconds
     >>> r.status_code
     408

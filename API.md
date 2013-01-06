@@ -6,7 +6,7 @@
 
     Method: POST
     Body (raw): {"title"; "client title", "wait": 5, "lifetime": 300}
-    URL: http://{hostname}:{port}/active_locks/{resource}
+    URL: http://{hostname}:{port}/locks/{resource}
 
     {resource} must valid ([a-zA-Z0-9]+)
 

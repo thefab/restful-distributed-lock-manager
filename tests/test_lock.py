@@ -29,14 +29,14 @@ class LockTestCase(tornado.testing.AsyncHTTPTestCase):
     def test_not_acquired_lock_bad_json(self):
         tmp = {"wait": 5, "lifetime": 10, "title": "test case"}
         raw_body = json.dumps(tmp)[0:10]
-        req = tornado.httpclient.HTTPRequest(self.get_url('/active_locks/resource1'), method='POST', body=raw_body)
+        req = tornado.httpclient.HTTPRequest(self.get_url('/locks/resource1'), method='POST', body=raw_body)
         self.http_client.fetch(req, self.stop)
         response = self.wait()
         self.assertEqual(response.code, 400)
 
     def test_not_acquired_lock_empty_body(self):
         raw_body = ""
-        req = tornado.httpclient.HTTPRequest(self.get_url('/active_locks/resource1'), method='POST', body=raw_body)
+        req = tornado.httpclient.HTTPRequest(self.get_url('/locks/resource1'), method='POST', body=raw_body)
         self.http_client.fetch(req, self.stop)
         response = self.wait()
         self.assertEqual(response.code, 400)
@@ -44,7 +44,7 @@ class LockTestCase(tornado.testing.AsyncHTTPTestCase):
     def test_not_acquired_lock_missing_field(self):
         tmp = {"wait": 5, "lifetime": 10}
         raw_body = json.dumps(tmp)
-        req = tornado.httpclient.HTTPRequest(self.get_url('/active_locks/resource1'), method='POST', body=raw_body)
+        req = tornado.httpclient.HTTPRequest(self.get_url('/locks/resource1'), method='POST', body=raw_body)
         self.http_client.fetch(req, self.stop)
         response = self.wait()
         self.assertEqual(response.code, 400)
@@ -52,7 +52,7 @@ class LockTestCase(tornado.testing.AsyncHTTPTestCase):
     def _acquire_lock(self, resource, wait, lifetime, title, callback=None):
         tmp = {"wait": wait, "lifetime": lifetime, "title": title}
         raw_body = json.dumps(tmp)
-        req = tornado.httpclient.HTTPRequest(self.get_url('/active_locks/%s' % resource), method='POST', body=raw_body)
+        req = tornado.httpclient.HTTPRequest(self.get_url('/locks/%s' % resource), method='POST', body=raw_body)
         if not(callback):
             self.http_client.fetch(req, self.stop)
             response = self.wait()
@@ -134,7 +134,7 @@ class LockTestCase(tornado.testing.AsyncHTTPTestCase):
         self._acquire_lock("resource1", 5, 60, "test case")
         tmp = {"wait": 1, "lifetime": 60, "title": "test case"}
         raw_body = json.dumps(tmp)
-        req = tornado.httpclient.HTTPRequest(self.get_url('/active_locks/%s' % "resource1"), method='POST', body=raw_body)
+        req = tornado.httpclient.HTTPRequest(self.get_url('/locks/%s' % "resource1"), method='POST', body=raw_body)
         self.http_client.fetch(req, self.stop)
         response = self.wait()
         self.assertEqual(response.code, 408)

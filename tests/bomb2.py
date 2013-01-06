@@ -12,7 +12,7 @@ RESOURCE_NAME_PREFIX = "resource"
 def f(process_number):
     resource_name = "%s%i" % (RESOURCE_NAME_PREFIX, process_number)
     raw_body = '{"title": "%i", "lifetime": 300, "wait": 20}' % process_number
-    r = requests.post("%s/active_locks/%s" % (BASE_URL, resource_name), data=raw_body)
+    r = requests.post("%s/locks/%s" % (BASE_URL, resource_name), data=raw_body)
     if r.status_code != 201:
         raise Exception("bad status code %i from post request" % r.status_code)
     lock_url = r.headers['Location']
