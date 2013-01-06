@@ -6,7 +6,7 @@
 
 from distutils.core import setup
 
-VERSION="0.1a1"
+VERSION="0.1a2"
 DESCRIPTION = "RDLM (Restful Distributed Lock Manager) is a lock manager over HTTP build on Tornado"
 try:
     with open('README.rst') as f:
