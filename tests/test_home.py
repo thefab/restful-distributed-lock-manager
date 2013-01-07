@@ -12,6 +12,6 @@ class HelloTestCase(tornado.testing.AsyncHTTPTestCase):
     def test_home(self):
         self.http_client.fetch(self.get_url('/'), self.stop)
         response = self.wait()
-        self.assertIn("Welcome", response.body)
+        self.assertIn("Welcome", response.body.decode('utf-8'))
         self.assertEqual(response.code, 200)
         

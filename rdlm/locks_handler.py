@@ -56,7 +56,7 @@ class LocksHandler(AbstractLockHandler):
         @summary: deals with POST request (acquiring locks on resource) 
         @param name: name of the resource
         '''
-        raw_body = self.request.body
+        raw_body = self.request.body.decode('utf-8')
         if len(raw_body) == 0:
             self.send_error(status_code=400, message="empty body")
             return

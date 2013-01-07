@@ -6,7 +6,11 @@
 
 import tornado.web
 import traceback
-import httplib
+try:
+    from httplib import responses
+except ImportError:
+    # Compatibility with Python3
+    from http.client import responses # pylint: disable-msg=F0401
 
 class RequestHandler(tornado.web.RequestHandler):
 
@@ -18,10 +22,10 @@ class RequestHandler(tornado.web.RequestHandler):
                 self.write(line)
             self.finish()
         else:
-            if kwargs.has_key('message'):
+            if 'message' in kwargs:
                 message = kwargs['message']
             else:
-                message = httplib.responses[status_code]
+                message = responses[status_code]
             self.finish("<html><title>%(code)d: %(message)s</title>"
                         "<body>%(code)d: %(message)s</body></html>" % {
                         "code": status_code,

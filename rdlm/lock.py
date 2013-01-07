@@ -221,7 +221,7 @@ class LockManager(object):
         If there is alreay an active lock, the lock is added to the 
         waiting list
         '''
-        if not(self.__resources_dict.has_key(resource_name)):
+        if resource_name not in self.__resources_dict:
             self.__resources_dict[resource_name] = Resource(resource_name)
         resource = self.__resources_dict[resource_name]
         resource.add_lock(lock)
@@ -234,7 +234,7 @@ class LockManager(object):
         Of course, if there is some non expired waiting locks,
         the first one is promoted as the active lock of the resource
         '''
-        if not(self.__resources_dict.has_key(resource_name)):
+        if resource_name not in self.__resources_dict:
             self.__resources_dict[resource_name] = Resource(resource_name)
         resource = self.__resources_dict[resource_name]
         resource.remove_active_lock()
@@ -245,7 +245,7 @@ class LockManager(object):
         @param resource_name: name of the resource
         @result: active lock object (or None)
         '''
-        if not(self.__resources_dict.has_key(resource_name)):
+        if resource_name not in self.__resources_dict:
             self.__resources_dict[resource_name] = Resource(resource_name)
         resource = self.__resources_dict[resource_name]
         return resource.active_lock
