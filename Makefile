@@ -18,9 +18,10 @@ clean:
 	rm -Rf build
 	rm -Rf dist
 	rm -f *.rst
+	rm -Rf rdlm.egg-info
 
 sdist: clean
-	python setup.py sdist --no-defaults
+	python setup.py sdist
 
 link: 
 	if ! test -L tests/rdlm; then ln -s ../rdlm tests/rdlm; fi

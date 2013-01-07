@@ -4,9 +4,9 @@
 # This file is part of restful-distributed-lock-manager released under the MIT license.
 # See the LICENSE file for more information.
 
-from distutils.core import setup
+from setuptools import setup, find_packages
+import rdlm
 
-VERSION="0.1a2"
 DESCRIPTION = "RDLM (Restful Distributed Lock Manager) is a lock manager over HTTP build on Tornado"
 try:
     with open('README.rst') as f:
@@ -16,16 +16,19 @@ except IOError:
 
 setup(
     name='rdlm',
-    version=VERSION,
+    version=rdlm.__version__,
     author="Fabien MARTY",
     author_email="fabien.marty@gmail.com",
     url="https://github.com/thefab/restful-distributed-lock-manager",
-    packages=['rdlm',],
+    packages=find_packages(),
     license='MIT',
     download_url='https://github.com/thefab/restful-distributed-lock-manager',
     description=DESCRIPTION,
     long_description=LONG_DESCRIPTION,
     scripts=["rdlm-daemon.py"],
+    install_requires=[
+        'tornado >= 2.3.0'
+    ],
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Environment :: Console',
