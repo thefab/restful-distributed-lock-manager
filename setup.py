@@ -7,7 +7,7 @@
 from setuptools import setup, find_packages
 import rdlm
 
-DESCRIPTION = "RDLM (Restful Distributed Lock Manager) is a lock manager over HTTP build on Tornado"
+DESCRIPTION = "RDLM (Restful Distributed Lock Manager) is a lock manager over HTTP built on Tornado"
 try:
     with open('README.rst') as f:
         LONG_DESCRIPTION = f.read()
