@@ -6,6 +6,7 @@
 
 ## 0.2 Milestone
 
+- Python3 support
 - Administrative requests :
     - list of current locks
     - list of waiting locks for a given resource
