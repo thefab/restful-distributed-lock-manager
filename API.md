@@ -76,6 +76,53 @@ exclusive lock is available. So, the "wait" parameters is a kind of timeout.
     StatusCode: 404 (Not Found)
     Body: error message
 
+## Administrative request : delete all locks on a resource (active and waiting)
+
+### Request
+
+    Method: DELETE
+    URL: http://{hostname}:{port}/resources/{resource}
+
+    {resource} must valid ([a-zA-Z0-9]+)
+
+### Response
+
+#### There are some locks on the resource
+
+    StatusCode: 204 (No Content)
+    Body: empty
+        => OK ALL LOCK ARE DELETED
+
+#### There is no lock on the resource
+
+    StatusCode: 404 (Not Found)
+    Body: error message
+
+#### You must provide an HTTP Basic authentification
+
+    StatusCode: 401 (Unauthorized)
+
+## Administrative request : delete all locks on all resources
+
+### Request
+
+    Method: DELETE
+    URL: http://{hostname}:{port}/resources
+
+### Response
+
+#### There are some locks on the resource
+
+    StatusCode: 204 (No Content)
+    Body: empty
+        => OK ALL LOCK ARE DELETED
+
+#### You must provide an HTTP Basic authentification
+
+    StatusCode: 401 (Unauthorized) 
+
+    
+
 
 
 

@@ -7,6 +7,7 @@ from rdlm.main import get_ioloop as rdlm_get_ioloop
 import json
 import tornado.ioloop
 import tornado.gen
+import time
 
 TEST_MULTIPLE_WAITERS1 = 0
 TEST_MULTIPLE_WAITERS2 = 0
@@ -14,16 +15,16 @@ TEST_MULTIPLE_WAITERS2 = 0
 class LockTestCase(tornado.testing.AsyncHTTPTestCase):
 
     def get_app(self):
-        return rdlm_get_app(unit_testing=True)
+        return rdlm_get_app()
 
     def get_new_ioloop(self): 
         return rdlm_get_ioloop()
 
     def tearDown(self):
-        req = tornado.httpclient.HTTPRequest(self.get_url("/reset"))
+        req = tornado.httpclient.HTTPRequest(self.get_url("/resources"), method='DELETE')
         self.http_client.fetch(req, self.stop)
         response = self.wait()
-        self.assertEqual(response.code, 200)
+        self.assertEqual(response.code, 204)
         super(LockTestCase, self).tearDown()
 
     def test_not_acquired_lock_bad_json(self):
@@ -178,6 +179,56 @@ class LockTestCase(tornado.testing.AsyncHTTPTestCase):
         self._acquire_lock("resource1", 10, 60, "test case", callback=self._test_multiple_waiters_callback3)
         self._acquire_lock("resource1", 10, 60, "test case", callback=self._test_multiple_waiters_callback3)
         self.wait()
+
+    def _test_delete_all_callback1(self, r):
+        self.assertEqual(r.code, 408)
+        self.stop()
+
+    def _test_delete_all_callback2(self):
+        req = tornado.httpclient.HTTPRequest(self.get_url("/resources"), method='DELETE')
+        self.http_client.fetch(req, self._test_delete_all_callback3)
+
+    def _test_delete_all_callback3(self, response):
+        self.assertEqual(response.code, 204)
+        self.stop()
+        
+    def test_delete_all(self):
+        location1 = self._acquire_lock("resource1", 5, 60, "test case")
+        location3 = self._acquire_lock("resource2", 5, 60, "test case")
+        self._acquire_lock("resource1", 5, 60, "test case", callback=self._test_delete_all_callback1)       
+        tornado.ioloop.IOLoop.instance().add_timeout(time.time() + 2, self._test_delete_all_callback2)
+        self.wait()
+        self.wait()
+        for location in [location1, location3]:
+            req2 = tornado.httpclient.HTTPRequest(location, method='GET')
+            self.http_client.fetch(req2, self.stop)
+            response2 = self.wait()
+            self.assertEqual(response2.code, 404)
+
+    def test_delete_resource(self):
+        location1 = self._acquire_lock("resource1", 5, 60, "test case")
+        req = tornado.httpclient.HTTPRequest(self.get_url("/resources/resource2"), method='DELETE')
+        self.http_client.fetch(req, self.stop)
+        r = self.wait()
+        self.assertEqual(r.code, 404)
+        req2 = tornado.httpclient.HTTPRequest(location1, method='GET')
+        self.http_client.fetch(req2, self.stop)
+        response2 = self.wait()
+        self.assertEqual(response2.code, 200)
+        req = tornado.httpclient.HTTPRequest(self.get_url("/resources/resource1"), method='DELETE')
+        self.http_client.fetch(req, self.stop)
+        r = self.wait()
+        self.assertEqual(r.code, 204)
+        req2 = tornado.httpclient.HTTPRequest(location1, method='GET')
+        self.http_client.fetch(req2, self.stop)
+        response2 = self.wait()
+        self.assertEqual(response2.code, 404)
+
+
+
+
+
+    
 
         
         

@@ -140,10 +140,24 @@ class Resource(object):
         self.active_lock = None
         self.__waiter_locks = collections.deque()
 
+    def delete(self):
+        '''
+        @summary: delete all locks of the resource
+        @result: True if there was at least a lock, False else
+        '''
+        while True:
+            try:
+                lock = self.__waiter_locks.popleft()
+                lock.delete()
+            except IndexError:
+                break
+        return self.remove_active_lock()
+
     def remove_active_lock(self):
         '''
         @summary: remove the active lock of the resource (if any)
-        
+        @result: True if there was an active lock, False else
+
         Of course, if there is some non expired waiting locks,
         the first one is promoted as the active lock of the resource
         '''
@@ -161,6 +175,8 @@ class Resource(object):
                     break
                 except IndexError:
                     break
+            return True
+        return False
 
     def add_lock(self, lock):
         '''
@@ -203,11 +219,23 @@ class LockManager(object):
 
     __resources_dict = {}
 
-    def _reinit(self):
-        '''
-        @summary: reinitialize the lock manager (for unit testing only) 
-        '''
+    def remove_all_resources(self):
+        resource_names = self.__resources_dict.keys()
+        for name in resource_names:
+            self.remove_resource(name)
         self.__resources_dict = {}
+
+    def remove_resource(self, resource_name):
+        '''
+        @summary: remove a resource (and its locks)
+        @param resource_name: name of the resource
+        @result: True if there was at least one lock, False else
+        '''
+        if resource_name  in self.__resources_dict:
+            res = self.__resources_dict[resource_name].delete()
+            del(self.__resources_dict[resource_name])
+            return res
+        return False
 
     def add_lock(self, resource_name, lock):
         '''

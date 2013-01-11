@@ -4,10 +4,10 @@
 # This file is part of restful-distributed-lock-manager released under the MIT license.
 # See the LICENSE file for more information.
 
-from rdlm.abstract_lock_handler import AbstractLockHandler
+from rdlm.request_handler import RequestHandler
 from rdlm.lock import LOCK_MANAGER_INSTANCE
 
-class LockHandler(AbstractLockHandler):
+class LockHandler(RequestHandler):
     """Class which handles the /locks/[resource]/[uid] URL"""
 
     SUPPORTED_METHODS = ['GET', 'DELETE']

@@ -17,6 +17,8 @@ clean:
 	rm -Rf dist
 	rm -f *.rst
 	rm -Rf rdlm.egg-info
+	rm -Rf rdlm/__pycache__
+	rm -Rf tests/__pycache__
 
 sdist: clean
 	python setup.py sdist
