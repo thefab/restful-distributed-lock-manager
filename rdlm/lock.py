@@ -49,12 +49,13 @@ class Lock(object):
         self.wait_since = datetime.datetime.now()
         self.wait_expires = self.wait_since + datetime.timedelta(seconds = wait)
 
-    def delete(self):
+    def delete(self, admin=False):
         '''
         @summary: explicit destructor
+        @param admin: True if the delete is made by an admin request
         '''
         if self.__delete_callback:
-            (self.__delete_callback)()
+            (self.__delete_callback)(admin=admin)
         self.reset_callbacks()
 
     @classmethod
@@ -148,27 +149,28 @@ class Resource(object):
         while True:
             try:
                 lock = self.__waiter_locks.popleft()
-                lock.delete()
+                lock.delete(admin=True)
             except IndexError:
                 break
-        return self.remove_active_lock()
+        return self.remove_active_lock(admin=True)
 
-    def remove_active_lock(self):
+    def remove_active_lock(self, admin=False):
         '''
         @summary: remove the active lock of the resource (if any)
+        @param admin: True if the delete is made by an admin request
         @result: True if there was an active lock, False else
 
         Of course, if there is some non expired waiting locks,
         the first one is promoted as the active lock of the resource
         '''
         if self.active_lock:
-            self.active_lock.delete()     
+            self.active_lock.delete(admin=admin)     
             self.active_lock = None
             while True:
                 try:
                     lock = self.__waiter_locks.popleft()
                     if lock.is_expired():
-                        lock.delete()
+                        lock.delete(admin=admin)
                         continue
                     lock.set_active()
                     self.active_lock = lock

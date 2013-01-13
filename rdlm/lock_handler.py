@@ -23,7 +23,7 @@ class LockHandler(RequestHandler):
             self.set_header('Content-Type', 'application/json')
             self.write(active_lock.to_json())
         else:
-            self.send_error(status_code=404)
+            self.send_error(status_code=404, message="lock not found")
             return
 
     def delete(self, name, uid): # pylint: disable-msg=W0221
@@ -35,8 +35,7 @@ class LockHandler(RequestHandler):
         active_lock = LOCK_MANAGER_INSTANCE.get_active_lock(name)
         if active_lock and (active_lock.uid == uid):
             LOCK_MANAGER_INSTANCE.remove_active_lock(name)
-            self.set_status(204)
-            self.finish()
+            self.send_status(204)
         else:
-            self.send_error(status_code=404)
+            self.send_error(status_code=404, message="lock not found")
             return

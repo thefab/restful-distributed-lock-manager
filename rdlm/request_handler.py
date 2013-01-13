@@ -58,6 +58,20 @@ class RequestHandler(tornado.web.RequestHandler):
         '''
         return "%s://%s" % (request.protocol, request.host)
 
+    def send_status(self, status_code, message = None, headers = None):
+        self.set_status(status_code)
+        if headers:
+            for name in headers.keys():
+                self.set_header(name, headers[name])
+        if message:
+            self.finish("<html><title>%(code)d: %(message)s</title>"
+                        "<body>%(code)d: %(message)s</body></html>" % {
+                        "code": status_code,
+                        "message": message,
+                        })
+        else:
+            self.finish()
+
     def write_error(self, status_code, **kwargs):
         if self.settings.get("debug") and "exc_info" in kwargs:
             # in debug mode, try to send a traceback

@@ -16,7 +16,6 @@ class ResourceHandler(RequestHandler):
     def delete(self, name): # pylint: disable-msg=W0221
         res = LOCK_MANAGER_INSTANCE.remove_resource(name)
         if res:
-            self.set_status(204)
-            self.finish()
+            self.send_status(204)
         else:
             self.send_error(404, message="no resource (with locks) found")

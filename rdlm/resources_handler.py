@@ -15,5 +15,4 @@ class ResourcesHandler(RequestHandler):
     @admin_authenticated
     def delete(self): # pylint: disable-msg=W0221
         LOCK_MANAGER_INSTANCE.remove_all_resources()
-        self.set_status(204)
-        self.finish()
+        self.send_status(204)

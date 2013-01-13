@@ -181,7 +181,7 @@ class LockTestCase(tornado.testing.AsyncHTTPTestCase):
         self.wait()
 
     def _test_delete_all_callback1(self, r):
-        self.assertEqual(r.code, 408)
+        self.assertEqual(r.code, 409)
         self.stop()
 
     def _test_delete_all_callback2(self):

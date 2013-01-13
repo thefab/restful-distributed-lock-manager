@@ -22,9 +22,14 @@ exclusive lock is available. So, the "wait" parameters is a kind of timeout.
         => (UNIQUE LOCK URL)
     Body: empty
 
-#### The lock is not acquired
+#### The lock is not acquired (timeout)
 
     StatusCode: 408 (Request Timeout)
+    Body: empty
+
+#### The lock is not acquired (request deleted by admin)
+
+    StatusCode: 409 (Conflict)
     Body: empty
 
 #### The request is invalid
