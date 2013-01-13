@@ -28,6 +28,18 @@ If the lock is acquired, the system gives to the lock a **unique** URL to the cl
 
 The development is at an early stage (see `ROADMAP.md` document).
 
+## Quickstart
+
+### Installation
+
+    pip install rdlm
+
+### Starting the daemon
+
+    rdlm-daemon.py --port=8888 --logging=debug
+
+    (rdlm-daemon.py --help for the full list of options)
+    
 ## API
 
 The API is described in this document with [the python/request library][REQUESTS] but it's a HTTP/RESTful API, so it's not linked with a specific language or tool. If you prefer a more classic HTTP/API file, please look at `API.md` file.
