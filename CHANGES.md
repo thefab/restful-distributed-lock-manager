@@ -1,5 +1,9 @@
 # CHANGES
 
+## Release 0.1b2 (beta)
+
+- doc update
+
 ## Release 0.1b1 (beta)
 
 - typos
