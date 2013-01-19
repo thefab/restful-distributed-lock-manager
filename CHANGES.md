@@ -1,5 +1,9 @@
 # CHANGES
 
+## Release 0.1 (beta)
+
+- no change
+
 ## Release 0.1b2 (beta)
 
 - doc update
