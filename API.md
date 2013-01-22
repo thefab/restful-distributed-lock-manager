@@ -5,7 +5,7 @@
 ### Request
 
     Method: POST
-    Body (raw): {"title"; "client title", "wait": 5, "lifetime": 300}
+    Body (raw): {"title": "client title", "wait": 5, "lifetime": 300}
     URL: http://{hostname}:{port}/locks/{resource}
 
     {resource} must valid ([a-zA-Z0-9]+)
@@ -72,9 +72,27 @@ exclusive lock is available. So, the "wait" parameters is a kind of timeout.
 #### The lock exist
 
     StatusCode: 200 (OK)
-    Header: Content-Type: application/json
-    Body: {"title"; "client title", "wait": 5, "lifetime": 300}
-        => THE BODY IS A VALID JSON OBJECT WITH THREE PROPERTIES : title, wait, lifetime
+    Header: Content-Type: application/hal+json
+    Body:
+    {
+        "uid": "aa4e181e17374148a21b30d9dcb941f9", 
+        "title": "plop", 
+        "active_since": "2013-01-22T23:01:16.771799", 
+        "_links": {
+            "self": {
+                "href": "/locks/popo/aa4e181e17374148a21b30d9dcb941f9"
+            }, 
+            "resource": {
+                "href": "/resources/popo"
+            }
+        }, 
+        "active_expires": "2013-01-22T23:06:16.771799", 
+        "active": true, 
+        "lifetime": 300, 
+        "wait": 5
+    }
+    
+        => THE BODY IS A VALID JSON/HAL OBJECT WITH SOME SELF DESCRIPTIVE PROPERTIES
 
 #### The lock don't exist (lifetime expiration, bad url, already deleted...)
 

@@ -31,8 +31,8 @@ def get_app():
     '''
     url_list = [
         tornado.web.URLSpec(r"/", HelloHandler, name="hello"),
-        tornado.web.URLSpec(r"/resources/([a-zA-Z0-9]+)", ResourceHandler, name="resources"),
-        tornado.web.URLSpec(r"/resources", ResourcesHandler, name="resource"),
+        tornado.web.URLSpec(r"/resources/([a-zA-Z0-9]+)", ResourceHandler, name="resource"),
+        tornado.web.URLSpec(r"/resources", ResourcesHandler, name="resources"),
         tornado.web.URLSpec(r"/locks/([a-zA-Z0-9]+)", LocksHandler, name="locks"),
         tornado.web.URLSpec(r"/locks/([a-zA-Z0-9]+)/([a-zA-Z0-9]+)", LockHandler, name="lock")
     ]
@@ -40,6 +40,9 @@ def get_app():
     return application
 
 def get_ioloop():
+    '''
+    @summary: returns a configured tornado ioloop
+    '''
     iol = tornado.ioloop.IOLoop.instance()
     tornado.ioloop.PeriodicCallback(on_every_second, 1000, iol).start()
     return iol

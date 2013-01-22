@@ -1,5 +1,11 @@
 # CHANGES
 
+## Release 0.2a1 (beta)
+
+- the GET request on a lock URL returns now a JSON/HAL resource
+- python3 support
+- admin requests
+
 ## Release 0.1 (beta)
 
 - no change

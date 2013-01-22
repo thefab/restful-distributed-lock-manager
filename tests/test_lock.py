@@ -102,7 +102,7 @@ class LockTestCase(tornado.testing.AsyncHTTPTestCase):
         self.http_client.fetch(req, self.stop)
         response = self.wait()
         self.assertEqual(response.code, 200)
-        self.assertEqual(response.headers['Content-Type'], 'application/json')
+        self.assertEqual(response.headers['Content-Type'], 'application/hal+json')
         tmp = json.loads(response.body.decode('utf-8'))
         self.assertEqual(tmp['title'], "test case")
         self.assertEqual(tmp['wait'], 5)
@@ -223,6 +223,26 @@ class LockTestCase(tornado.testing.AsyncHTTPTestCase):
         self.http_client.fetch(req2, self.stop)
         response2 = self.wait()
         self.assertEqual(response2.code, 404)
+
+    def test_get_resource(self):
+        self._acquire_lock("resource1", 5, 60, "test case")
+        req = tornado.httpclient.HTTPRequest(self.get_url("/resources/resource2"), method='GET')
+        self.http_client.fetch(req, self.stop)
+        r = self.wait()
+        self.assertEqual(r.code, 404)
+        req = tornado.httpclient.HTTPRequest(self.get_url("/resources/resource1"), method='GET')
+        self.http_client.fetch(req, self.stop)
+        r = self.wait()
+        self.assertEqual(r.code, 200)
+
+    def test_get_resources(self):
+        self._acquire_lock("resource1", 5, 60, "test case")
+        self._acquire_lock("resource2", 5, 60, "test case")
+        req = tornado.httpclient.HTTPRequest(self.get_url("/resources"), method='GET')
+        self.http_client.fetch(req, self.stop)
+        r = self.wait()
+        self.assertEqual(r.code, 200)
+
 
 
 

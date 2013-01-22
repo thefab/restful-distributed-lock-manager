@@ -6,6 +6,7 @@
 
 from rdlm.request_handler import RequestHandler
 from rdlm.lock import LOCK_MANAGER_INSTANCE
+from rdlm.hal import Resource, Link
 
 class LockHandler(RequestHandler):
     """Class which handles the /locks/[resource]/[uid] URL"""
@@ -20,8 +21,12 @@ class LockHandler(RequestHandler):
         '''    
         active_lock = LOCK_MANAGER_INSTANCE.get_active_lock(name)
         if active_lock and (active_lock.uid == uid):
-            self.set_header('Content-Type', 'application/json')
-            self.write(active_lock.to_json())
+
+            self.set_header('Content-Type', 'application/hal+json')
+            hal_lock = Resource(href=self.reverse_url("lock", name, active_lock.uid), properties=active_lock.to_dict())
+            hal_resource_link = Link(href=self.reverse_url("resource", name))
+            hal_lock.add_link(rel="resource", link=hal_resource_link, multiple=False)
+            self.write(hal_lock.to_json())
         else:
             self.send_error(status_code=404, message="lock not found")
             return

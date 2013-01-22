@@ -24,7 +24,7 @@ sdist: clean
 	python setup.py sdist
 
 test:
-	cd tests && python -m tornado.test.runtests test_home test_lock
+	cd tests && nosetests
 
 rst:
 	cat README.md |pandoc --from=markdown --to=rst >README.rst

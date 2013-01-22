@@ -75,14 +75,30 @@ class Lock(object):
             return None
         return Lock(resource_name, title, wait, lifetime)
 
+    def to_dict(self):
+        '''
+        @summary: method which dumps the lock object as a python dict
+        @result: python dict
+        '''
+        tmp = {"uid": self.uid,
+               "title": self.title,
+               "wait": self.wait,
+               "lifetime": self.lifetime,
+               "active": self.__active}
+        if self.__active:
+            tmp['active_since'] = self.active_since.isoformat()
+            tmp['active_expires'] = self.active_expires.isoformat()
+        else:
+            tmp['wait_since'] = self.wait_since.isoformat()
+            tmp['wait_expires'] = self.wait_expires.isoformat()
+        return tmp
+
     def to_json(self):
         '''
         @summary: method which dumps the lock object as a json string
         @result: json string
         '''
-        tmp = {"title": self.title,
-               "wait": self.wait,
-               "lifetime": self.lifetime}
+        tmp = self.to_dict()
         return json.dumps(tmp, indent=4, sort_keys=True)
 
     def set_active(self):
@@ -140,6 +156,28 @@ class Resource(object):
         self.name = name
         self.active_lock = None
         self.__waiter_locks = collections.deque()
+
+    def to_dict(self):
+        '''
+        @summary: method which dumps the resource as a python dict
+        @result: python dict
+        '''
+        tmp = {}
+        tmp["name"] = self.name
+        tmp["locks"] = []
+        if self.active_lock:
+            tmp["locks"].append(self.active_lock.to_dict())
+        for waiting_lock in self.__waiter_locks:
+            tmp["locks"].append(waiting_lock.to_dict())
+        return tmp
+
+    def to_json(self):
+        '''
+        @summary: method which dumps the resource object as a json string
+        @result: json string
+        '''
+        tmp = self.to_dict()
+        return json.dumps(tmp, indent=4, sort_keys=True)
 
     def delete(self):
         '''
@@ -218,14 +256,46 @@ class Resource(object):
 
 
 class LockManager(object):
+    '''
+    Class which managers resources
 
-    __resources_dict = {}
+    Designed to be used as a singleton
+    '''
+
+    __resources_dict = None
+
+    def __init__(self):
+        '''
+        @summary: constructor
+        @result: ResourceManager object
+        '''
+        self.__resources_dict = {}
 
     def remove_all_resources(self):
+        '''
+        @summary: remove all resources
+        '''
         resource_names = self.__resources_dict.keys()
         for name in resource_names:
             self.remove_resource(name)
         self.__resources_dict = {}
+
+    def get_resources_names(self):
+        '''
+        @summary: returns a python list with resource names
+        @result: python list of strings
+        '''
+        return self.__resources_dict.keys()
+
+    def get_resource_as_dict(self, resource_name):
+        '''
+        @summary: returns the given resource as a python dict
+        @param resource_name: name of resource
+        @result: python dict
+        '''
+        if resource_name not in self.__resources_dict:
+            return None
+        return self.__resources_dict[resource_name].to_dict()
 
     def remove_resource(self, resource_name):
         '''
