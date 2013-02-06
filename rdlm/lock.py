@@ -59,7 +59,7 @@ class Lock(object):
         self.reset_callbacks()
 
     @classmethod
-    def from_json(self, resource_name, json_string):
+    def from_json(cls, resource_name, json_string):
         '''
         @summary: class method which build a lock object from the corresponding json string
         @param resource_name: name of the resource
