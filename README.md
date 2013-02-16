@@ -4,7 +4,7 @@
 
 `RDLM` (Restful Distributed Lock Manager) is a lock manager over HTTP built on [Tornado][TORNADO].
 
-## Status
+## Status (master branch)
 
 [![Build Status](https://travis-ci.org/thefab/restful-distributed-lock-manager.png)](https://travis-ci.org/thefab/restful-distributed-lock-manager)
 
