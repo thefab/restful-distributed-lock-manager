@@ -9,6 +9,10 @@ class HelloTestCase(tornado.testing.AsyncHTTPTestCase):
     def get_app(self):
         return rdlm_get_app()
 
+    # compatibility with python 2.6
+    def assertIn(self, str1, str2):
+        self.assertTrue(str1 in str2)
+
     def test_home(self):
         self.http_client.fetch(self.get_url('/'), self.stop)
         response = self.wait()
