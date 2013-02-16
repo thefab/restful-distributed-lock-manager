@@ -275,7 +275,7 @@ class LockManager(object):
         '''
         @summary: remove all resources
         '''
-        resource_names = self.__resources_dict.keys()
+        resource_names = self.get_resources_names()
         for name in resource_names:
             self.remove_resource(name)
         self.__resources_dict = {}
@@ -285,7 +285,7 @@ class LockManager(object):
         @summary: returns a python list with resource names
         @result: python list of strings
         '''
-        return self.__resources_dict.keys()
+        return list(self.__resources_dict.keys())
 
     def get_resource_as_dict(self, resource_name):
         '''
@@ -354,7 +354,7 @@ class LockManager(object):
         '''
         @summary: clean expired lock of all resources (active and waiting)
         '''
-        names = self.__resources_dict.keys()
+        names = self.get_resources_names()
         for name in names:
             self.__resources_dict[name].clean_expired_locks()
 
