@@ -14,6 +14,10 @@ try:
 except IOError:
     LONG_DESCRIPTION = DESCRIPTION
 
+with open('pip-requirements.txt') as reqs:
+    install_requires = [
+        line for line in reqs.read().split('\n') if (line and not
+                                                     line.startswith('--'))]
 setup(
     name='rdlm',
     version=rdlm.__version__,
@@ -26,9 +30,7 @@ setup(
     description=DESCRIPTION,
     long_description=LONG_DESCRIPTION,
     scripts=["rdlm-daemon.py"],
-    install_requires=[
-        'tornado >= 2.3.0'
-    ],
+    install_requires=install_requires,
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Console',
@@ -50,3 +52,4 @@ setup(
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content'
       ]
 )
+
