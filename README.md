@@ -1,12 +1,38 @@
 # restful-distributed-lock-manager
 
+## Status (master branch)
+
+[![Build Status](https://travis-ci.org/thefab/restful-distributed-lock-manager.png)](https://travis-ci.org/thefab/restful-distributed-lock-manager)
+
 ## What is it ?
 
 `RDLM` (Restful Distributed Lock Manager) is a lock manager over HTTP built on [Tornado][TORNADO].
 
-## Status (master branch)
+## Special features
 
-[![Build Status](https://travis-ci.org/thefab/restful-distributed-lock-manager.png)](https://travis-ci.org/thefab/restful-distributed-lock-manager)
+- RESTful interface
+- Timeout automatic management (to avoid stale locks)
+- Blocking wait for acquiring a lock (with customatizable timeout)
+- Very fast (in memory)
+- One unique single threaded process
+- Can deal with thousands of locks and simultaneous connections
+- Administrative password protected requests
+
+## Quickstart
+
+### Installation
+
+    pip install rdlm
+
+    Requirements: 
+    - [Python](http://www.python.org) 2.6, 2.7, 3.2 or 3.3
+    - [Tornado][TORNADO] >= 2.3
+                  
+### Starting the daemon
+
+    rdlm-daemon.py --port=8888 --logging=debug
+
+    (rdlm-daemon.py --help for the full list of options)
 
 ## Concepts
 
@@ -27,18 +53,6 @@ The lock is defined by 3 incoming parameters :
 - the "wait" param (in seconds), which is the maximum duration to wait before acquiring the lock (after this, the client gives up about acquiring the lock)
 
 If the lock is acquired, the system gives to the lock a **unique** URL to the client.
-
-## Quickstart
-
-### Installation
-
-    pip install rdlm
-
-### Starting the daemon
-
-    rdlm-daemon.py --port=8888 --logging=debug
-
-    (rdlm-daemon.py --help for the full list of options)
     
 ## API
 
