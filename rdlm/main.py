@@ -6,6 +6,7 @@
 
 import tornado.ioloop
 import tornado.web
+import logging
 
 from rdlm.options import Options 
 from rdlm.hello_handler import HelloHandler
@@ -47,6 +48,12 @@ def get_ioloop():
     tornado.ioloop.PeriodicCallback(on_every_second, 1000, iol).start()
     return iol
 
+def log_is_ready():
+    '''
+    @summary: simple callback just to log that the daemon is ready
+    '''
+    logging.info("RDLM daemon is ready !")
+
 def main():
     '''
     @summary: main function (starts the daemon)
@@ -55,6 +62,7 @@ def main():
     tornado.options.parse_command_line()
     application.listen(Options().port)
     iol = get_ioloop()
+    iol.add_callback(log_is_ready)
     iol.start()
 
 if __name__ == '__main__':
