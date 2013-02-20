@@ -1,5 +1,10 @@
 # CHANGES
 
+## Release 0.2a2 (beta)
+
+- the GET request on a resource URL returns always HTTP/200
+- documentation update
+
 ## Release 0.2a1 (beta)
 
 - the GET request on a lock URL returns now a JSON/HAL resource
