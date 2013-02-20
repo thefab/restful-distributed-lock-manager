@@ -25,8 +25,8 @@
     pip install rdlm
 
     Requirements: 
-    - [Python](http://www.python.org) 2.6, 2.7, 3.2 or 3.3
-    - [Tornado][TORNADO] >= 2.3
+    - Python 2.6, 2.7, 3.2 or 3.3
+    - Tornado >= 2.3
                   
 ### Starting the daemon
 
