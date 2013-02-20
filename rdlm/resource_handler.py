@@ -32,12 +32,10 @@ class ResourceHandler(RequestHandler):
         @param name: name of the resource
         '''
         tmp = LOCK_MANAGER_INSTANCE.get_resource_as_dict(name)
-        if not(tmp):
-            self.send_error(404, message="resource not found")
-            return
         resource = Resource(self.reverse_url("resource", name), {"name": name})
-        for lock_dict in tmp['locks']:
-            lock = Resource(self.reverse_url("lock", name, lock_dict['uid']), lock_dict)
-            resource.add_embedded_resource("locks", lock)
+        if not(tmp):
+            for lock_dict in tmp['locks']:
+                lock = Resource(self.reverse_url("lock", name, lock_dict['uid']), lock_dict)
+                resource.add_embedded_resource("locks", lock)
         self.set_header("Content-Type", "application/hal+json")
         self.finish(resource.to_json())
