@@ -33,7 +33,7 @@ class ResourceHandler(RequestHandler):
         '''
         tmp = LOCK_MANAGER_INSTANCE.get_resource_as_dict(name)
         resource = Resource(self.reverse_url("resource", name), {"name": name})
-        if not(tmp):
+        if tmp:
             for lock_dict in tmp['locks']:
                 lock = Resource(self.reverse_url("lock", name, lock_dict['uid']), lock_dict)
                 resource.add_embedded_resource("locks", lock)

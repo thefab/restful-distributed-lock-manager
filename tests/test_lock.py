@@ -233,7 +233,7 @@ class LockTestCase(tornado.testing.AsyncHTTPTestCase):
         req = tornado.httpclient.HTTPRequest(self.get_url("/resources/resource2"), method='GET')
         self.http_client.fetch(req, self.stop)
         r = self.wait()
-        self.assertEqual(r.code, 404)
+        self.assertEqual(r.code, 200)
         req = tornado.httpclient.HTTPRequest(self.get_url("/resources/resource1"), method='GET')
         self.http_client.fetch(req, self.stop)
         r = self.wait()
