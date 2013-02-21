@@ -15,7 +15,6 @@ clean:
 	rm -f MANIFEST
 	rm -Rf build
 	rm -Rf dist
-	rm -f *.rst
 	rm -Rf rdlm.egg-info
 	rm -Rf rdlm/__pycache__
 	rm -Rf tests/__pycache__
@@ -26,10 +25,7 @@ sdist: clean
 test:
 	cd tests && nosetests
 
-rst:
-	cat README.md |pandoc --from=markdown --to=rst >README.rst
-
-upload: rst
+upload:
 	python setup.py sdist register upload
 
 coverage:

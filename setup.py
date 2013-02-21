@@ -9,7 +9,7 @@ import rdlm
 
 DESCRIPTION = "RDLM (Restful Distributed Lock Manager) is a lock manager over HTTP built on Tornado"
 try:
-    with open('README.rst') as f:
+    with open('PIP.rst') as f:
         LONG_DESCRIPTION = f.read()
 except IOError:
     LONG_DESCRIPTION = DESCRIPTION

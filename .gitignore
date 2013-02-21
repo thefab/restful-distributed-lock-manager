@@ -6,7 +6,6 @@
 # Packages
 *.egg
 *.egg-info
-*.rst
 dist
 build
 eggs
