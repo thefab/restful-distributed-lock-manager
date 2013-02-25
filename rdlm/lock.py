@@ -9,6 +9,7 @@ import datetime
 import collections
 import json
 
+
 class Lock(object):
     '''
     Class which defines a Lock object
@@ -38,7 +39,7 @@ class Lock(object):
         @param title: title of the lock
         @param wait: wait max duration (in seconds)
         @param lifetime: timeout of the lock (in seconds)
-        @result: lock object (not active) 
+        @result: lock object (not active)
         '''
         self.resource_name = resource_name
         self.lifetime = lifetime
@@ -47,7 +48,7 @@ class Lock(object):
         self.wait = wait
         self.lifetime = lifetime
         self.wait_since = datetime.datetime.now()
-        self.wait_expires = self.wait_since + datetime.timedelta(seconds = wait)
+        self.wait_expires = self.wait_since + datetime.timedelta(seconds=wait)
 
     def delete(self, admin=False):
         '''
@@ -109,11 +110,11 @@ class Lock(object):
         self.wait_expires = None
         self.__active = True
         self.active_since = datetime.datetime.now()
-        self.active_expires = self.active_since + datetime.timedelta(seconds = self.lifetime)
+        self.active_expires = self.active_since + datetime.timedelta(seconds=self.lifetime)
         if self.__active_callback:
             (self.__active_callback)()
         self.reset_callbacks()
-        
+
     def set_callbacks(self, active_callback, delete_callback):
         '''
         @summary: setter for callbacks
@@ -132,7 +133,8 @@ class Lock(object):
 
     def is_expired(self):
         '''
-        @summary: returns True is the lock is expired (wait timeout or lifetime timeout depending on the status)
+        @summary: returns True is the lock is expired (wait timeout or lifetime timeout
+                  depending on the status)
         @result: True (the lock is expired) or False
         '''
         if self.__active:
@@ -202,7 +204,7 @@ class Resource(object):
         the first one is promoted as the active lock of the resource
         '''
         if self.active_lock:
-            self.active_lock.delete(admin=admin)     
+            self.active_lock.delete(admin=admin)
             self.active_lock = None
             while True:
                 try:
@@ -222,14 +224,13 @@ class Resource(object):
         '''
         @summary: add a lock to the resource
         @param lock: lock object
-        
+
         If there is no active lock, the lock is promoted as the active
         lock for the resource
 
-        If there is alreay an active lock, the lock is added to the 
+        If there is alreay an active lock, the lock is added to the
         waiting list
         '''
-        
         if not(self.active_lock):
             lock.set_active()
             self.active_lock = lock
@@ -303,7 +304,7 @@ class LockManager(object):
         @param resource_name: name of the resource
         @result: True if there was at least one lock, False else
         '''
-        if resource_name  in self.__resources_dict:
+        if resource_name in self.__resources_dict:
             res = self.__resources_dict[resource_name].delete()
             del(self.__resources_dict[resource_name])
             return res
@@ -314,11 +315,11 @@ class LockManager(object):
         @summary: add a lock to the resource
         @param resource_name: name of the resource
         @param lock: lock object
-        
+
         If there is no active lock, the lock is promoted as the active
         lock for the resource
 
-        If there is alreay an active lock, the lock is added to the 
+        If there is alreay an active lock, the lock is added to the
         waiting list
         '''
         if resource_name not in self.__resources_dict:

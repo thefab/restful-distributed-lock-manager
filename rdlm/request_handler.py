@@ -10,12 +10,13 @@ try:
     from httplib import responses
 except ImportError:
     # Compatibility with Python3
-    from http.client import responses # pylint: disable-msg=F0401
+    from http.client import responses
 from rdlm.options import Options
 import base64
 
+
 def admin_authenticated(func):
-    def wrapper(handler, *args, **kwargs): # pylint: disable-msg=W0613
+    def wrapper(handler, *args, **kwargs):
         admin_userpass_file = Options().admin_userpass_file
         if admin_userpass_file == "yes":
             return func(handler, *args, **kwargs)
@@ -23,7 +24,7 @@ def admin_authenticated(func):
             handler.send_error(403)
             return False
         auth_header = handler.request.headers.get('Authorization')
-        if auth_header is not None and auth_header.startswith('Basic '):         
+        if auth_header is not None and auth_header.startswith('Basic '):
             auth_decoded = base64.decodestring(auth_header[6:])
             basicauth_user, basicauth_pass = auth_decoded.split(':', 2)
             try:
@@ -33,7 +34,7 @@ def admin_authenticated(func):
                         username, password = line.strip().split(":", 1)
                         if (basicauth_user == username) and (basicauth_pass == password):
                             return func(handler, *args, **kwargs)
-            except: # pylint: disable-msg=W0702
+            except:
                 handler.send_error(500, message="bad admin userpass file")
                 return False
         handler.set_status(401)
@@ -41,6 +42,7 @@ def admin_authenticated(func):
         handler.finish()
         return False
     return wrapper
+
 
 class RequestHandler(tornado.web.RequestHandler):
     """Just an abstract class to store some utilities methods"""
@@ -52,13 +54,13 @@ class RequestHandler(tornado.web.RequestHandler):
         @result: the http://hostname:port part of an url
 
         The base url is built from another incoming http request
-        to get the correct hostname and port as choosen by the 
-        client (in order to avoid some problems with proxy 
+        to get the correct hostname and port as choosen by the
+        client (in order to avoid some problems with proxy
         configurations)
         '''
         return "%s://%s" % (request.protocol, request.host)
 
-    def send_status(self, status_code, message = None, headers = None):
+    def send_status(self, status_code, message=None, headers=None):
         self.set_status(status_code)
         if headers:
             for name in headers.keys():

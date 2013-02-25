@@ -8,6 +8,7 @@ import json
 import collections
 import copy
 
+
 class Link(object):
     '''
     Class which defines a HAL Link object
@@ -16,7 +17,7 @@ class Link(object):
     href = None
     title = None
 
-    def __init__(self, href, title = None):
+    def __init__(self, href, title=None):
         '''
         @summary: constructor
         @param href: href target
@@ -32,20 +33,21 @@ class Link(object):
         @result: python dict
         '''
         if self.title:
-            return { "href": self.href, "title": self.title }
+            return {"href": self.href, "title": self.title}
         else:
-            return { "href": self.href }
+            return {"href": self.href}
+
 
 class Resource(object):
     '''
     Class which defines a HAL Resource object
-    '''   
+    '''
 
     properties = None
     links = None
     embedded_resources = None
 
-    def __init__(self, href, properties = None):
+    def __init__(self, href, properties=None):
         '''
         @summary: constructor
         @param href: href target
@@ -63,12 +65,12 @@ class Resource(object):
     def add_property(self, name, value):
         '''
         @summary: adds a property to the resource
-        @param name: name 
+        @param name: name
         @param value: value
         '''
         self.properties[name] = value
 
-    def add_link(self, rel, link, multiple = False):
+    def add_link(self, rel, link, multiple=False):
         '''
         @summary: adds a link to the resource
         @param rel: rel type
@@ -111,7 +113,8 @@ class Resource(object):
         if len(self.embedded_resources) > 0:
             tmp["_embedded"] = {}
         for collection_name in self.embedded_resources:
-            tmp["_embedded"][collection_name] = [x.to_dict() for x in (self.embedded_resources[collection_name])]
+            li = [x.to_dict() for x in (self.embedded_resources[collection_name])]
+            tmp["_embedded"][collection_name] = li
         return tmp
 
     def to_json(self):
@@ -120,6 +123,3 @@ class Resource(object):
         @result: JSON serialization of the HAL Resource object
         '''
         return json.dumps(self.to_dict(), indent=4)
-            
-
-

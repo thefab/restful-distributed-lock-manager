@@ -8,13 +8,14 @@ from rdlm.request_handler import RequestHandler, admin_authenticated
 from rdlm.lock import LOCK_MANAGER_INSTANCE
 from rdlm.hal import Resource
 
+
 class ResourceHandler(RequestHandler):
     """Class which handles the /resources/[resource] URL"""
 
     SUPPORTED_METHODS = ['GET', 'DELETE']
 
     @admin_authenticated
-    def delete(self, name): # pylint: disable-msg=W0221
+    def delete(self, name):
         '''
         @summary: deals with DELETE request (deleting the given resource)
         @param name: name of the resource
@@ -26,7 +27,7 @@ class ResourceHandler(RequestHandler):
             self.send_error(404, message="no resource (with locks) found")
 
     @admin_authenticated
-    def get(self, name): # pylint: disable-msg=W0221
+    def get(self, name):
         '''
         @summary: deals with GET request (getting a JSON HAL of the resource)
         @param name: name of the resource

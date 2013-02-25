@@ -7,7 +7,9 @@
 from setuptools import setup, find_packages
 import rdlm
 
-DESCRIPTION = "RDLM (Restful Distributed Lock Manager) is a lock manager over HTTP built on Tornado"
+DESCRIPTION = "RDLM (Restful Distributed Lock Manager) is a lock manager "
+DESCRIPTION = DESCRIPTION + "over HTTP build on Tornado"
+
 try:
     with open('PIP.rst') as f:
         LONG_DESCRIPTION = f.read()
@@ -43,14 +45,13 @@ setup(
         'Operating System :: POSIX',
         'Operating System :: Unix',
         'Programming Language :: Python :: 2.6',
-        'Programming Language :: Python :: 2.7',  
-        'Programming Language :: Python :: 3.2',  
-        'Programming Language :: Python :: 3.3',  
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.2',
+        'Programming Language :: Python :: 3.3',
         'Topic :: Utilities',
         'Topic :: System :: Distributed Computing',
         'Topic :: Software Development',
         'Topic :: Internet :: WWW/HTTP :: HTTP Servers',
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content'
-      ]
+    ]
 )
-

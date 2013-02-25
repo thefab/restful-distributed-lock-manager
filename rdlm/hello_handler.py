@@ -6,6 +6,7 @@
 
 from rdlm.request_handler import RequestHandler
 
+
 class HelloHandler(RequestHandler):
     """Class which handles the / URL"""
 

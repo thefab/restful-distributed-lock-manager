@@ -7,8 +7,12 @@
 from tornado.options import define
 from tornado.options import options as tornado_options
 
-define("port", default=8888, type=int, metavar="PORT", help="main port (of the lock manager)", group="rdlm")
-define("admin_userpass_file", default="yes", type=str, metavar="ADMIN_USERPASS_FILE", help="the full path of an admin userpass file (special values : no => no admin requests, yes => no auth for admin requests)", group="rdlm")
+define("port", default=8888, type=int, metavar="PORT",
+       help="main port (of the lock manager)", group="rdlm")
+define("admin_userpass_file", default="yes", type=str, metavar="ADMIN_USERPASS_FILE",
+       help="the full path of an admin userpass file (special values : no => no admin requests, \
+             yes => no auth for admin requests)", group="rdlm")
+
 
 class Options(object):
     '''Class to store command line options'''
@@ -28,4 +32,3 @@ class Options(object):
         @result: the full path of the admin userpass file
         '''
         return tornado_options.admin_userpass_file
-
