@@ -92,7 +92,7 @@ def main():
     application = get_app()
     tornado.options.parse_command_line()
     server = HTTPServer(application)
-    server.listen(Options().port)
+    server.listen(Options.port())
     iol = get_ioloop()
     iol.add_callback(log_is_ready)
     signal.signal(signal.SIGTERM, lambda s, f: sigterm_handler(server, iol, s, f))

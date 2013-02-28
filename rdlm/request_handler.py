@@ -17,7 +17,7 @@ import base64
 
 def admin_authenticated(func):
     def wrapper(handler, *args, **kwargs):
-        admin_userpass_file = Options().admin_userpass_file
+        admin_userpass_file = Options.admin_userpass_file()
         if admin_userpass_file == "yes":
             return func(handler, *args, **kwargs)
         if admin_userpass_file == "no":

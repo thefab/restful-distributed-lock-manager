@@ -17,16 +17,16 @@ define("admin_userpass_file", default="yes", type=str, metavar="ADMIN_USERPASS_F
 class Options(object):
     '''Class to store command line options'''
 
-    @property
-    def port(self):
+    @classmethod
+    def port(cls):
         '''
         @summary: returns the main port of the daemon
         @result: the port of the daemon (as an integer)
         '''
         return tornado_options.port
 
-    @property
-    def admin_userpass_file(self):
+    @classmethod
+    def admin_userpass_file(cls):
         '''
         @summary: returns the admin userpass file
         @result: the full path of the admin userpass file
