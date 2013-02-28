@@ -18,6 +18,8 @@ clean:
 	rm -Rf rdlm.egg-info
 	rm -Rf rdlm/__pycache__
 	rm -Rf tests/__pycache__
+	rm -f tests/conf.py
+	rm -f tests/auth.txt
 
 sdist: clean
 	python setup.py sdist
