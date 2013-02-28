@@ -6,7 +6,12 @@
 
 import tornado.ioloop
 import tornado.web
+from tornado.httpserver import HTTPServer
+
+import functools
 import logging
+import signal
+import time
 
 from rdlm.options import Options
 from rdlm.hello_handler import HelloHandler
@@ -59,16 +64,43 @@ def log_is_ready():
     logging.info("RDLM daemon is ready !")
 
 
+def sigterm_handler(server, loop, signum, frame):
+    logging.info("SIGTERM signal catched => scheduling webserver stop...")
+    loop.add_callback(functools.partial(stop_server, server, loop))
+
+
+def stop_server(server, loop):
+    logging.info("Stopping webserver...")
+    server.stop()
+    if loop:
+        logging.info("Webserver stopped => scheduling main loop stop...")
+        loop.add_timeout(time.time() + 5, functools.partial(stop_loop, loop))
+    else:
+        logging.info("Webserver stopped !")
+
+
+def stop_loop(loop):
+    logging.info("Stopping main loop...")
+    loop.stop()
+    logging.info("Main loop stopped !")
+
+
 def main():
     '''
     @summary: main function (starts the daemon)
     '''
     application = get_app()
     tornado.options.parse_command_line()
-    application.listen(Options().port)
+    server = HTTPServer(application)
+    server.listen(Options().port)
     iol = get_ioloop()
     iol.add_callback(log_is_ready)
-    iol.start()
+    signal.signal(signal.SIGTERM, lambda s, f: sigterm_handler(server, iol, s, f))
+    try:
+        iol.start()
+    except KeyboardInterrupt:
+        stop_server(server, None)
+    logging.info("RDLM daemon is stopped !")
 
 
 if __name__ == '__main__':
