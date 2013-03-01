@@ -25,8 +25,9 @@ def admin_authenticated(func):
             return False
         auth_header = handler.request.headers.get('Authorization')
         if auth_header is not None and auth_header.startswith('Basic '):
-            auth_decoded = base64.decodestring(auth_header[6:])
-            basicauth_user, basicauth_pass = auth_decoded.split(':', 2)
+            tmp = auth_header.encode('ascii')
+            auth_decoded = base64.decodestring(tmp[6:])
+            basicauth_user, basicauth_pass = auth_decoded.decode('utf-8').split(':', 2)
             try:
                 with open(admin_userpass_file, "r") as f:
                     lines = f.readlines()

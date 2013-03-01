@@ -62,14 +62,14 @@ class AuthTestCase(tornado.testing.AsyncHTTPTestCase):
         b64 = base64.standard_b64encode(b"foo2:bar2")
         req = tornado.httpclient.HTTPRequest(self.get_url("/resources"),
                                              method='DELETE',
-                                             headers={'Authorization': "Basic %s" % b64})
+                                             headers={'Authorization': b"Basic " + b64})
         self.http_client.fetch(req, self.stop)
         response = self.wait()
         self.assertEqual(response.code, 204)
         b64 = base64.standard_b64encode(b"foo:bar2")
         req = tornado.httpclient.HTTPRequest(self.get_url("/resources"),
                                              method='DELETE',
-                                             headers={'Authorization': "Basic %s" % b64})
+                                             headers={'Authorization': b"Basic " + b64})
         self.http_client.fetch(req, self.stop)
         response = self.wait()
         self.assertEqual(response.code, 401)
