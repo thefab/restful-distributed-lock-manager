@@ -44,6 +44,6 @@ Starting the daemon
 API
 ---
 
-The complete HTTP API is described in `this specific document <https://github.com/thefab/restful-distributed-lock-manager/blob/0.2/API.md>`_.
+The complete HTTP API is described in `this specific document <https://github.com/thefab/restful-distributed-lock-manager/blob/0.3/API.md>`_.
 
 If you prefer a pure python API, you can also have a look at : `this specific project <https://github.com/thefab/rdlm-py>`_.
