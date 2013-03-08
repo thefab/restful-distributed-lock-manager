@@ -53,12 +53,14 @@ The lock is defined by 3 incoming parameters :
 - the "wait" param (in seconds), which is the maximum duration to wait before acquiring the lock (after this, the client gives up about acquiring the lock)
 
 If the lock is acquired, the system gives to the lock a **unique** URL to the client.
-    
-## Part of the API
 
-This part of the API is described here with [the python/request library][REQUESTS] but it's a HTTP/RESTful API, so it's not linked with a specific language or tool. 
+## API
 
-If you prefer a more classic HTTP/API file or if you want to see the full API, please look at `API.md` file.
+The HTTP API is fully described in the [the specific API.md file](API.md).
+
+## Example of consuming the API
+
+This example is described here with [the python/request library][REQUESTS] but it's a HTTP/RESTful API, so it's not linked with a specific language or tool. 
 
 You can also have a look at a pure python client : [rdlm-py](https://github.com/thefab/rdlm-py).
 
