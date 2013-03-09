@@ -13,7 +13,7 @@ class HalTestCase(unittest.TestCase):
         tmp1 = a.to_dict()
         tmp2 = b.to_dict()
         self.assertEqual(tmp1['href'], "/foo")
-        self.assertEqual(tmp2['href'] , "/foo")
+        self.assertEqual(tmp2['href'], "/foo")
         self.assertTrue("title" not in tmp1)
         self.assertTrue("title" in tmp2)
         self.assertEqual(tmp2['title'], "bar")

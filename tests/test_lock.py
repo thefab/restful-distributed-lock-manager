@@ -151,14 +151,14 @@ class LockTestCase(tornado.testing.AsyncHTTPTestCase):
         self.assertEqual(response.code, 408)
 
     def _test_multiple_waiters_callback2(self, r):
-        global TEST_MULTIPLE_WAITERS1 # pylint: disable-msg=W0603
+        global TEST_MULTIPLE_WAITERS1  # pylint: disable-msg=W0603
         TEST_MULTIPLE_WAITERS1 = TEST_MULTIPLE_WAITERS1 + 1
         self.assertEqual(r.code, 204)
         if TEST_MULTIPLE_WAITERS1 == 4:
             self.stop()
 
     def _test_multiple_waiters_callback4(self, r):
-        global TEST_MULTIPLE_WAITERS2 # pylint: disable-msg=W0603
+        global TEST_MULTIPLE_WAITERS2  # pylint: disable-msg=W0603
         TEST_MULTIPLE_WAITERS2 = TEST_MULTIPLE_WAITERS2 + 1
         self.assertEqual(r.code, 204)
         if TEST_MULTIPLE_WAITERS2 == 4:
@@ -179,7 +179,7 @@ class LockTestCase(tornado.testing.AsyncHTTPTestCase):
     def test_multiple_waiters1(self):
         self._acquire_lock("resource10", 10, 60, "test case",
                            callback=self._test_multiple_waiters_callback1)
-        self._acquire_lock("resource20", 10, 60, "test case"
+        self._acquire_lock("resource20", 10, 60, "test case",
                            callback=self._test_multiple_waiters_callback1)
         self._acquire_lock("resource30", 10, 60, "test case",
                            callback=self._test_multiple_waiters_callback1)
