@@ -8,6 +8,7 @@ import uuid
 import datetime
 import collections
 import json
+import logging
 
 
 class Lock(object):
@@ -246,6 +247,8 @@ class Resource(object):
             try:
                 lock = self.__waiter_locks.popleft()
                 if lock.is_expired():
+                    logging.warning("Expired waiting lock [%s] on [%s] => removing it" % (
+                                    lock.title, self.name))
                     lock.delete()
                     continue
                 tmp_queue.append(lock)
@@ -253,6 +256,8 @@ class Resource(object):
                 break
         self.__waiter_locks = tmp_queue
         if self.active_lock and self.active_lock.is_expired():
+            logging.warning("Expired active lock [%s] on [%s] => releasing it" % (
+                            self.active_lock.title, self.name))
             self.remove_active_lock()
 
 
