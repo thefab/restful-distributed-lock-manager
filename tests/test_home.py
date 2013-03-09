@@ -4,6 +4,7 @@
 import tornado.testing
 from rdlm.main import get_app as rdlm_get_app
 
+
 class HelloTestCase(tornado.testing.AsyncHTTPTestCase):
 
     def get_app(self):
@@ -18,4 +19,3 @@ class HelloTestCase(tornado.testing.AsyncHTTPTestCase):
         response = self.wait()
         self.assertIn("Welcome", response.body.decode('utf-8'))
         self.assertEqual(response.code, 200)
-        

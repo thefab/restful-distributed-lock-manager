@@ -9,6 +9,7 @@ REQUESTS = 10000
 BASE_URL = "http://localhost:8888"
 RESOURCE_NAME = "resource"
 
+
 def f(process_number):
     resource_name = RESOURCE_NAME
     raw_body = '{"title": "%i", "lifetime": 300, "wait": 20}' % process_number
@@ -19,7 +20,7 @@ def f(process_number):
     r = requests.delete(lock_url)
     if r.status_code != 204:
         raise Exception("bad status code %i from delete request" % r.status_code)
- 
+
 if __name__ == '__main__':
     pool = Pool(processes=PROCESS_POOL_SIZE)
     pool.map(f, range(0, REQUESTS))

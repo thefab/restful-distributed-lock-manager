@@ -12,6 +12,7 @@ import time
 TEST_MULTIPLE_WAITERS1 = 0
 TEST_MULTIPLE_WAITERS2 = 0
 
+
 class LockTestCase(tornado.testing.AsyncHTTPTestCase):
 
     def get_app(self):
@@ -21,7 +22,7 @@ class LockTestCase(tornado.testing.AsyncHTTPTestCase):
     def assertIn(self, str1, str2):
         self.assertTrue(str1 in str2)
 
-    def get_new_ioloop(self): 
+    def get_new_ioloop(self):
         return rdlm_get_ioloop()
 
     def tearDown(self):
@@ -34,14 +35,16 @@ class LockTestCase(tornado.testing.AsyncHTTPTestCase):
     def test_not_acquired_lock_bad_json(self):
         tmp = {"wait": 5, "lifetime": 10, "title": "test case"}
         raw_body = json.dumps(tmp)[0:10]
-        req = tornado.httpclient.HTTPRequest(self.get_url('/locks/resource1'), method='POST', body=raw_body)
+        req = tornado.httpclient.HTTPRequest(self.get_url('/locks/resource1'), method='POST',
+                                             body=raw_body)
         self.http_client.fetch(req, self.stop)
         response = self.wait()
         self.assertEqual(response.code, 400)
 
     def test_not_acquired_lock_empty_body(self):
         raw_body = ""
-        req = tornado.httpclient.HTTPRequest(self.get_url('/locks/resource1'), method='POST', body=raw_body)
+        req = tornado.httpclient.HTTPRequest(self.get_url('/locks/resource1'), method='POST',
+                                             body=raw_body)
         self.http_client.fetch(req, self.stop)
         response = self.wait()
         self.assertEqual(response.code, 400)
@@ -49,7 +52,8 @@ class LockTestCase(tornado.testing.AsyncHTTPTestCase):
     def test_not_acquired_lock_missing_field(self):
         tmp = {"wait": 5, "lifetime": 10}
         raw_body = json.dumps(tmp)
-        req = tornado.httpclient.HTTPRequest(self.get_url('/locks/resource1'), method='POST', body=raw_body)
+        req = tornado.httpclient.HTTPRequest(self.get_url('/locks/resource1'), method='POST',
+                                             body=raw_body)
         self.http_client.fetch(req, self.stop)
         response = self.wait()
         self.assertEqual(response.code, 400)
@@ -57,7 +61,8 @@ class LockTestCase(tornado.testing.AsyncHTTPTestCase):
     def _acquire_lock(self, resource, wait, lifetime, title, callback=None):
         tmp = {"wait": wait, "lifetime": lifetime, "title": title}
         raw_body = json.dumps(tmp)
-        req = tornado.httpclient.HTTPRequest(self.get_url('/locks/%s' % resource), method='POST', body=raw_body)
+        req = tornado.httpclient.HTTPRequest(self.get_url('/locks/%s' % resource),
+                                             method='POST', body=raw_body)
         if not(callback):
             self.http_client.fetch(req, self.stop)
             response = self.wait()
@@ -68,7 +73,7 @@ class LockTestCase(tornado.testing.AsyncHTTPTestCase):
             return location
         else:
             self.http_client.fetch(req, callback)
-            
+
     def _delete_lock(self, lock_url):
         req = tornado.httpclient.HTTPRequest(lock_url, method='DELETE')
         self.http_client.fetch(req, self.stop)
@@ -139,7 +144,8 @@ class LockTestCase(tornado.testing.AsyncHTTPTestCase):
         self._acquire_lock("resource1", 5, 60, "test case")
         tmp = {"wait": 1, "lifetime": 60, "title": "test case"}
         raw_body = json.dumps(tmp)
-        req = tornado.httpclient.HTTPRequest(self.get_url('/locks/%s' % "resource1"), method='POST', body=raw_body)
+        req = tornado.httpclient.HTTPRequest(self.get_url('/locks/%s' % "resource1"),
+                                             method='POST', body=raw_body)
         self.http_client.fetch(req, self.stop)
         response = self.wait()
         self.assertEqual(response.code, 408)
@@ -171,17 +177,25 @@ class LockTestCase(tornado.testing.AsyncHTTPTestCase):
         self.http_client.fetch(req, callback=self._test_multiple_waiters_callback4)
 
     def test_multiple_waiters1(self):
-        self._acquire_lock("resource10", 10, 60, "test case", callback=self._test_multiple_waiters_callback1)
-        self._acquire_lock("resource20", 10, 60, "test case", callback=self._test_multiple_waiters_callback1)
-        self._acquire_lock("resource30", 10, 60, "test case", callback=self._test_multiple_waiters_callback1)
-        self._acquire_lock("resource40", 10, 60, "test case", callback=self._test_multiple_waiters_callback1)
+        self._acquire_lock("resource10", 10, 60, "test case",
+                           callback=self._test_multiple_waiters_callback1)
+        self._acquire_lock("resource20", 10, 60, "test case"
+                           callback=self._test_multiple_waiters_callback1)
+        self._acquire_lock("resource30", 10, 60, "test case",
+                           callback=self._test_multiple_waiters_callback1)
+        self._acquire_lock("resource40", 10, 60, "test case",
+                           callback=self._test_multiple_waiters_callback1)
         self.wait()
 
     def test_multiple_waiters2(self):
-        self._acquire_lock("resource1", 10, 60, "test case", callback=self._test_multiple_waiters_callback3)
-        self._acquire_lock("resource1", 10, 60, "test case", callback=self._test_multiple_waiters_callback3)
-        self._acquire_lock("resource1", 10, 60, "test case", callback=self._test_multiple_waiters_callback3)
-        self._acquire_lock("resource1", 10, 60, "test case", callback=self._test_multiple_waiters_callback3)
+        self._acquire_lock("resource1", 10, 60, "test case",
+                           callback=self._test_multiple_waiters_callback3)
+        self._acquire_lock("resource1", 10, 60, "test case",
+                           callback=self._test_multiple_waiters_callback3)
+        self._acquire_lock("resource1", 10, 60, "test case",
+                           callback=self._test_multiple_waiters_callback3)
+        self._acquire_lock("resource1", 10, 60, "test case",
+                           callback=self._test_multiple_waiters_callback3)
         self.wait()
 
     def _test_delete_all_callback1(self, r):
@@ -195,12 +209,14 @@ class LockTestCase(tornado.testing.AsyncHTTPTestCase):
     def _test_delete_all_callback3(self, response):
         self.assertEqual(response.code, 204)
         self.stop()
-        
+
     def test_delete_all(self):
         location1 = self._acquire_lock("resource1", 5, 60, "test case")
         location3 = self._acquire_lock("resource2", 5, 60, "test case")
-        self._acquire_lock("resource1", 5, 60, "test case", callback=self._test_delete_all_callback1)       
-        tornado.ioloop.IOLoop.instance().add_timeout(time.time() + 2, self._test_delete_all_callback2)
+        self._acquire_lock("resource1", 5, 60, "test case",
+                           callback=self._test_delete_all_callback1)
+        tornado.ioloop.IOLoop.instance().add_timeout(time.time() + 2,
+                                                     self._test_delete_all_callback2)
         self.wait()
         self.wait()
         for location in [location1, location3]:
@@ -246,21 +262,3 @@ class LockTestCase(tornado.testing.AsyncHTTPTestCase):
         self.http_client.fetch(req, self.stop)
         r = self.wait()
         self.assertEqual(r.code, 200)
-
-
-
-
-
-
-    
-
-        
-        
-
-
-
-
-
-
-
-    

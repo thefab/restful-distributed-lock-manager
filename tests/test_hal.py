@@ -4,6 +4,7 @@
 import unittest
 from rdlm.hal import Link, Resource
 
+
 class HalTestCase(unittest.TestCase):
 
     def test_link(self):
@@ -21,13 +22,13 @@ class HalTestCase(unittest.TestCase):
         a = Resource("/foo")
         tmp = a.to_dict()
         self.assertEqual(tmp['_links']['self']['href'], '/foo')
-        
+
     def test_resource2(self):
         a = Resource("/foo", {'key1': 'value1', 'key2': 'value2'})
         tmp = a.to_dict()
         self.assertEqual(tmp['key1'], 'value1')
         self.assertEqual(tmp['key2'], 'value2')
-        
+
     def test_resource3(self):
         a = Resource("/foo", {'key1': 'value1', 'key2': 'value2'})
         b = Resource("/bar", {'key3': 'value3', 'key4': 'value4'})
@@ -35,5 +36,3 @@ class HalTestCase(unittest.TestCase):
         tmp = a.to_dict()
         self.assertEqual(tmp["_embedded"]['bars'][0]['key3'], 'value3')
         self.assertEqual(tmp["_embedded"]['bars'][0]['key4'], 'value4')
-        
-        
