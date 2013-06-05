@@ -51,13 +51,13 @@ class Lock(object):
         self.wait_since = datetime.datetime.now()
         self.wait_expires = self.wait_since + datetime.timedelta(seconds=wait)
 
-    def delete(self, admin=False):
+    def delete(self, timeout=True):
         '''
         @summary: explicit destructor
-        @param admin: True if the delete is made by an admin request
+        @param timeout: if True, the delete is made by a timeout
         '''
         if self.__delete_callback:
-            (self.__delete_callback)(admin=admin)
+            (self.__delete_callback)(timeout=timeout)
         self.reset_callbacks()
 
     @classmethod
@@ -149,7 +149,7 @@ class Resource(object):
 
     name = None
     active_lock = None
-    __waiter_locks = None
+    __waiting_locks = None
 
     def __init__(self, name):
         '''
@@ -158,7 +158,7 @@ class Resource(object):
         '''
         self.name = name
         self.active_lock = None
-        self.__waiter_locks = collections.deque()
+        self.__waiting_locks = collections.deque()
 
     def to_dict(self):
         '''
@@ -170,7 +170,7 @@ class Resource(object):
         tmp["locks"] = []
         if self.active_lock:
             tmp["locks"].append(self.active_lock.to_dict())
-        for waiting_lock in self.__waiter_locks:
+        for waiting_lock in self.__waiting_locks:
             tmp["locks"].append(waiting_lock.to_dict())
         return tmp
 
@@ -189,29 +189,29 @@ class Resource(object):
         '''
         while True:
             try:
-                lock = self.__waiter_locks.popleft()
-                lock.delete(admin=True)
+                lock = self.__waiting_locks.popleft()
+                lock.delete(timeout=False)
             except IndexError:
                 break
-        return self.remove_active_lock(admin=True)
+        return self.remove_active_lock(timeout=False)
 
-    def remove_active_lock(self, admin=False):
+    def remove_active_lock(self, timeout=True):
         '''
         @summary: remove the active lock of the resource (if any)
-        @param admin: True if the delete is made by an admin request
+        @param timeout: if True, the delete is made by a timeout
         @result: True if there was an active lock, False else
 
         Of course, if there is some non expired waiting locks,
         the first one is promoted as the active lock of the resource
         '''
         if self.active_lock:
-            self.active_lock.delete(admin=admin)
+            self.active_lock.delete(timeout=timeout)
             self.active_lock = None
             while True:
                 try:
-                    lock = self.__waiter_locks.popleft()
+                    lock = self.__waiting_locks.popleft()
                     if lock.is_expired():
-                        lock.delete(admin=admin)
+                        lock.delete(timeout=timeout)
                         continue
                     lock.set_active()
                     self.active_lock = lock
@@ -236,7 +236,7 @@ class Resource(object):
             lock.set_active()
             self.active_lock = lock
         else:
-            self.__waiter_locks.append(lock)
+            self.__waiting_locks.append(lock)
 
     def clean_expired_locks(self):
         '''
@@ -245,7 +245,7 @@ class Resource(object):
         tmp_queue = collections.deque()
         while True:
             try:
-                lock = self.__waiter_locks.popleft()
+                lock = self.__waiting_locks.popleft()
                 if lock.is_expired():
                     logging.warning("Expired waiting lock [%s] on [%s] => removing it" % (
                                     lock.title, self.name))
@@ -254,7 +254,7 @@ class Resource(object):
                 tmp_queue.append(lock)
             except IndexError:
                 break
-        self.__waiter_locks = tmp_queue
+        self.__waiting_locks = tmp_queue
         if self.active_lock and self.active_lock.is_expired():
             logging.warning("Expired active lock [%s] on [%s] => releasing it" % (
                             self.active_lock.title, self.name))

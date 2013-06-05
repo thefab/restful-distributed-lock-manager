@@ -25,13 +25,13 @@ class LocksHandler(RequestHandler):
         tornado.ioloop.IOLoop.instance().add_callback(functools.partial(self.on_active,
                                                                         name, lock))
 
-    def on_delete_wrapper(self, admin=False):
+    def on_delete_wrapper(self, timeout=True):
         '''
         @summary: wrapper method to invoke on_delete method through tornado ioloop
-        @param admin: if True, the delete is made by an admin request
+        @param timeout: if True, the delete is made by a timeout
         '''
-        tornado.ioloop.IOLoop.instance().add_callback(functools.partial(self.on_delete,
-                                                                        admin=admin))
+        f = functools.partial(self.on_delete, timeout=timeout)
+        tornado.ioloop.IOLoop.instance().add_callback(f)
 
     def on_active(self, name, lock):
         '''
@@ -45,16 +45,16 @@ class LocksHandler(RequestHandler):
         url = "%s%s" % (self.get_base_url(self.request), self.reverse_url("lock", name, lock.uid))
         self.send_status(201, message="lock acquired at %s" % url, headers={"Location": url})
 
-    def on_delete(self, admin=False):
+    def on_delete(self, timeout=True):
         '''
         @summary: method called when the wait for the lock is over
-        @param admin: True if the delete is made by an admin request
+        @param timeout: if True, the delete is made by a timeout
 
         The method returns an HTTP/408 or an HTTP/409 in this case
-        (depending if the delete is made by an admin request)
+        (depending if the delete is made by a timeout or an admin request)
         '''
-        if admin:
-            self.send_error(status_code=409, message="lock request deleted by an admin request")
+        if not(timeout):
+            self.send_error(status_code=409, message="lock request deleted")
         else:
             self.send_error(status_code=408, message="lock request (wait) timeout")
 
