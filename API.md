@@ -27,7 +27,7 @@ exclusive lock is available. So, the "wait" parameters is a kind of timeout.
     StatusCode: 408 (Request Timeout)
     Body: empty
 
-#### The lock is not acquired (request deleted by admin)
+#### The lock is not acquired (request deleted)
 
     StatusCode: 409 (Conflict)
     Body: empty
