@@ -22,7 +22,6 @@ class LockHandler(RequestHandler):
         '''
         active_lock = LOCK_MANAGER_INSTANCE.get_active_lock(name)
         if active_lock and (active_lock.uid == uid):
-
             self.set_header('Content-Type', 'application/hal+json')
             hal_lock = Resource(href=self.reverse_url("lock", name, active_lock.uid),
                                 properties=active_lock.to_dict())
