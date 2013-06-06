@@ -4,6 +4,7 @@
 
 - you can delete any lock (but you need to know its uid) and not only the active one
 - a GET request for a "waiting lock" returns now a valid reply
+- flake8 fixes
 
 ## Release 0.3
 
