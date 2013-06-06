@@ -20,11 +20,11 @@ class LockHandler(RequestHandler):
         @param name: name of the resource
         @param uid: uid of the lock
         '''
-        active_lock = LOCK_MANAGER_INSTANCE.get_active_lock(name)
-        if active_lock and (active_lock.uid == uid):
+        lock = LOCK_MANAGER_INSTANCE.get_lock(name, uid)
+        if lock:
             self.set_header('Content-Type', 'application/hal+json')
-            hal_lock = Resource(href=self.reverse_url("lock", name, active_lock.uid),
-                                properties=active_lock.to_dict())
+            hal_lock = Resource(href=self.reverse_url("lock", name, lock.uid),
+                                properties=lock.to_dict())
             hal_resource_link = Link(href=self.reverse_url("resource", name))
             hal_lock.add_link(rel="resource", link=hal_resource_link, multiple=False)
             self.write(hal_lock.to_json())
@@ -38,9 +38,8 @@ class LockHandler(RequestHandler):
         @param name: name of the resource
         @param uid: uid of the lock
         '''
-        active_lock = LOCK_MANAGER_INSTANCE.get_active_lock(name)
-        if active_lock and (active_lock.uid == uid):
-            LOCK_MANAGER_INSTANCE.remove_active_lock(name)
+        res = LOCK_MANAGER_INSTANCE.delete_lock(name, uid)
+        if res:
             self.send_status(204)
         else:
             self.send_error(status_code=404, message="lock not found")

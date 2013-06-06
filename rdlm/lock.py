@@ -182,43 +182,72 @@ class Resource(object):
         tmp = self.to_dict()
         return json.dumps(tmp, indent=4, sort_keys=True)
 
-    def delete(self):
+    def delete(self, uid=None):
         '''
-        @summary: delete all locks of the resource
+        @summary: delete all locks of the resource (uid=None) or a specific lock (uid!=None)
+        @param uid: uid of the lock to delete (or None to delete all)
         @result: True if there was at least a lock, False else
         '''
+        tmp_queue = collections.deque()
+        res = False
         while True:
             try:
                 lock = self.__waiting_locks.popleft()
-                lock.delete(timeout=False)
+                if not(uid):
+                    lock.delete(timeout=False)
+                    res = True
+                else:
+                    if lock.uid == uid:
+                        lock.delete(timeout=False)
+                        res = True
+                    else:
+                        tmp_queue.append(lock)
             except IndexError:
                 break
-        return self.remove_active_lock(timeout=False)
+        self.__waiting_locks = tmp_queue
+        res = res or self.remove_active_lock(timeout=False, uid=uid)
+        return res
 
-    def remove_active_lock(self, timeout=True):
+    def get(self, uid):
+        '''
+        @summary: return the lock with the given uid
+        @param uid: uid of the lock to get
+        @result: lock object (or None)
+        '''
+        for lock in self.__waiting_locks:
+            if lock.uid == uid and not(lock.is_expired()):
+                return lock
+        if self.active_lock and not(self.active_lock.is_expired()):
+            if self.active_lock.uid == uid:
+                return self.active_lock
+
+    def remove_active_lock(self, timeout=True, uid=None):
         '''
         @summary: remove the active lock of the resource (if any)
         @param timeout: if True, the delete is made by a timeout
+        @param uid: uid of the lock to delete (or None to delete
+                    the active lock without specific test)
         @result: True if there was an active lock, False else
 
         Of course, if there is some non expired waiting locks,
         the first one is promoted as the active lock of the resource
         '''
         if self.active_lock:
-            self.active_lock.delete(timeout=timeout)
-            self.active_lock = None
-            while True:
-                try:
-                    lock = self.__waiting_locks.popleft()
-                    if lock.is_expired():
-                        lock.delete(timeout=timeout)
-                        continue
-                    lock.set_active()
-                    self.active_lock = lock
-                    break
-                except IndexError:
-                    break
-            return True
+            if not(uid) or self.active_lock.uid == uid:
+                self.active_lock.delete(timeout=timeout)
+                self.active_lock = None
+                while True:
+                    try:
+                        lock = self.__waiting_locks.popleft()
+                        if lock.is_expired():
+                            lock.delete(timeout=timeout)
+                            continue
+                        lock.set_active()
+                        self.active_lock = lock
+                        break
+                    except IndexError:
+                        break
+                return True
         return False
 
     def add_lock(self, lock):
@@ -332,29 +361,29 @@ class LockManager(object):
         resource = self.__resources_dict[resource_name]
         resource.add_lock(lock)
 
-    def remove_active_lock(self, resource_name):
+    def delete_lock(self, resource_name, uid):
         '''
-        @summary: remove the active lock of the resource (if any)
+        @summary: delete a specific lock for the given resource
         @param resource_name: name of the resource
-
-        Of course, if there is some non expired waiting locks,
-        the first one is promoted as the active lock of the resource
+        @param uid: uid of the lock to delete
+        @param lock: True if something has been deleted (False else)
         '''
         if resource_name not in self.__resources_dict:
             self.__resources_dict[resource_name] = Resource(resource_name)
         resource = self.__resources_dict[resource_name]
-        resource.remove_active_lock()
+        return resource.delete(uid)
 
-    def get_active_lock(self, resource_name):
+    def get_lock(self, resource_name, uid):
         '''
-        @summary: return the active lock for the resource name
+        @summary: get a specific lock for the given resource
         @param resource_name: name of the resource
-        @result: active lock object (or None)
+        @param uid: uid of the lock to get
+        @param lock: lock object (or None if not found)
         '''
         if resource_name not in self.__resources_dict:
             self.__resources_dict[resource_name] = Resource(resource_name)
         resource = self.__resources_dict[resource_name]
-        return resource.active_lock
+        return resource.get(uid)
 
     def clean_expired_locks(self):
         '''

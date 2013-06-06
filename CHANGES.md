@@ -1,5 +1,10 @@
 # CHANGES
 
+## Release 0.4 (future)
+
+- you can delete any lock (but you need to know its uid) and not only the active one
+- a GET request for a "waiting lock" returns now a valid reply
+
 ## Release 0.3
 
 - python3 fixes
