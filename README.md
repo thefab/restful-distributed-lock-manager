@@ -48,11 +48,11 @@ Of course, clients can be distributed on different machines / networks... withou
 
 The lock is defined by 3 incoming parameters :
 
-- the "title" param, which is a simple indicative string about the client requesting the lock
-- the "lifetime" param (in seconds), which is the maximum duration of the lock (after this, the lock will be considered as released)
+- the "title" param, which is a simple indicative string about the client requesting the lock (so a kind of "user agent")
+- the "lifetime" param (in seconds), which is the maximum duration of the lock when acquired (after this, the lock will be considered as automatically released)
 - the "wait" param (in seconds), which is the maximum duration to wait before acquiring the lock (after this, the client gives up about acquiring the lock)
 
-If the lock is acquired, the system gives to the lock a **unique** URL to the client.
+If the lock is acquired, the system returns the lock as a **unique** URL.
 
 ## API
 

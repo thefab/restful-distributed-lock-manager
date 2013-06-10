@@ -1,5 +1,9 @@
 # API
 
+## Concepts
+
+Please read the [README.md](README.md) first (specifically the concepts section).
+
 ## Acquire a lock
 
 ### Request
@@ -13,7 +17,7 @@
 ### Response
 
 If the request is valid, it is blocking during a **maximum** of "wait" parameters (specified in the body of the request). Of course, the response is given as soon as the 
-exclusive lock is available. So, the "wait" parameters is a kind of timeout. 
+exclusive lock is available.
 
 #### The lock is acquired
 
