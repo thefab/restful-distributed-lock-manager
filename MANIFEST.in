@@ -2,6 +2,8 @@ include .gitignore
 include LICENSE
 include README.md
 include Makefile
+include pip-requirements.txt
+include test-requirements.txt
 include rdlm-daemon.py
 recursive-include tests *
 recursive-include rdlm *
