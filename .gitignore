@@ -40,3 +40,4 @@ tests/htmlcov
 
 tests/auth.txt
 tests/conf.py
+.idea
