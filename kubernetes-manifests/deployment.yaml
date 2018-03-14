@@ -1,0 +1,23 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: restful-distributed-lock-manager
+    group: com.stakater.platform
+    version: 0.5.1
+    provider: stakater
+  name: ingress-monitor-controller
+spec:
+  replicas: 1
+  revisionHistoryLimit: 2
+  template:
+    metadata:
+      labels:
+        app: restful-distributed-lock-manager
+        group: com.stakater.platform
+        version: 0.5.1
+        provider: stakater
+    spec:
+      containers:
+      - image: stakater/restful-distributed-lock-manager:0.5.1
+        name: restful-distributed-lock-manager
