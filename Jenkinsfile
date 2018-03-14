@@ -29,6 +29,7 @@ controllerNode(clientsImage: 'stakater/pipeline-tools:1.3.0') {
         if (utils.isCI()) {
             stage('CI: Test') {
                 sh """
+                    make clean install
                     make test
                 """
             }
