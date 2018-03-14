@@ -35,8 +35,8 @@ controllerNode(clientsImage: 'stakater/pipeline-tools:1.3.0') {
             }
             stage('CI: Publish Dev Image') {
                 sh """
-                    docker build -t docker.io/stakater/RestfulDistributedLockManager:dev .
-                    docker push docker.io/stakater/RestfulDistributedLockManager:dev
+                    docker build -t docker.io/stakater/restful-distributed-lock-manager:dev .
+                    docker push docker.io/stakater/restful-distributed-lock-manager:dev
                 """
             }
         }
