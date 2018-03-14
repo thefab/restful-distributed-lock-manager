@@ -14,6 +14,6 @@ COPY pip-requirements.txt /usr/src/app/
 RUN pip install -r pip-requirements.txt
 
 COPY . /usr/src/app
-RUN make install
+RUN make -f Makefile-Build install
 
 CMD python rdlm-daemon.py

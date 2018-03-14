@@ -31,8 +31,8 @@ controllerNode(clientsImage: 'stakater/pipeline-tools:1.3.0') {
         if (utils.isCI()) {
             stage('CI: Test') {
                 sh """
-                    make clean install
-                    make test
+                    make -f Makefile-Build clean install
+                    make -f Makefile-Build test
                 """
             }
             stage('CI: Publish Dev Image') {
@@ -44,8 +44,8 @@ controllerNode(clientsImage: 'stakater/pipeline-tools:1.3.0') {
         } else if (utils.isCD()) {
             stage('CD: Build') {
                 sh """
-                    make clean install
-                    make test
+                    make -f Makefile-Build clean install
+                    make -f Makefile-Build test
                 """
             }
 
