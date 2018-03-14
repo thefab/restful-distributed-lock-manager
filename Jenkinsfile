@@ -9,7 +9,7 @@ String thisRepo = "git@github.com:stakater/RestfulDistributedLockManager"
 String thisRepoBranch = "master"
 String thisRepoDir = "RestfulDistributedLockManager"
 
-controllerNode(clientsImage: 'stakater/pipeline-tools:1.2.0') {
+controllerNode(clientsImage: 'stakater/pipeline-tools:1.2.1') {
 
     container(name: 'clients') {
         String workspaceDir = WORKSPACE
