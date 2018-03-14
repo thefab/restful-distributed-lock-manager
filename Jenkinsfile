@@ -22,6 +22,7 @@ controllerNode(clientsImage: 'stakater/pipeline-tools:1.3.0') {
         stage('Download Dependencies') {
             sh """
                 pip install -r pip-requirements.txt
+                pip install nose
             """
         }
 
