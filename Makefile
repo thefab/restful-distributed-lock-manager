@@ -34,3 +34,5 @@ coverage:
 	cd tests && coverage run `which nosetests` && coverage html --include='*/restful-distributed-lock-manager/*' --omit='test_*'
 
 release: test coverage clean upload clean 
+
+VERSION := 0.5.0

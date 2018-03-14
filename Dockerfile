@@ -1,4 +1,5 @@
 FROM python:2.7
+LABEL author="stakater"
 
 EXPOSE 8888
 
