@@ -21,3 +21,7 @@ spec:
       containers:
       - image: stakater/restful-distributed-lock-manager:0.5.1
         name: restful-distributed-lock-manager
+        ports:
+        - containerPort: 8888
+          name: http
+          protocol: TCP

@@ -1,0 +1,50 @@
+---
+apiVersion: v1
+kind: List
+items:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    labels:
+      app: restful-distributed-lock-manager
+      group: com.stakater.platform
+      version: 0.5.1
+      provider: stakater
+    name: app
+  spec:
+    ports:
+    - name: http
+      port: 8080
+      protocol: TCP
+      targetPort: 8888
+    selector:
+      app: restful-distributed-lock-manager
+      group: com.stakater.platform
+      provider: stakater
+- apiVersion: extensions/v1beta1
+  kind: Deployment
+  metadata:
+    labels:
+      app: restful-distributed-lock-manager
+      group: com.stakater.platform
+      version: 0.5.1
+      provider: stakater
+    name: ingress-monitor-controller
+  spec:
+    replicas: 1
+    revisionHistoryLimit: 2
+    template:
+      metadata:
+        labels:
+          app: restful-distributed-lock-manager
+          group: com.stakater.platform
+          version: 0.5.1
+          provider: stakater
+      spec:
+        containers:
+        - image: stakater/restful-distributed-lock-manager:0.5.1
+          name: restful-distributed-lock-manager
+          ports:
+          - containerPort: 8888
+            name: http
+            protocol: TCP
